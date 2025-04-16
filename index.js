@@ -60,20 +60,18 @@ function init() {
 }
 
 function train() {
+  classifier = ml5.neuralNetwork(options);
+
   data.forEach(item => {
     let inputs = [item.x, item.y];
     let outputs = [item.value];
-    if (!item.trained) {
-      classifier.addData(inputs, outputs);
-      item.trained = true;
-    }
+    classifier.addData(inputs, outputs);
   });
   classifier.normalizeData();
   classifier.train({ epochs: 50 }, () => {
     console.log('Model trained');
     label = 'trained';
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    data.length = 0;
     updateStatus();
     // classifier.save();
   });
@@ -85,26 +83,32 @@ function click(event) {
   const y = event.clientY - top;
 
   if (label === 'trained') {
-    classify({ event, x, y });
+    classify({ x, y });
   } else {
-    addCircle({ event, x, y, value });
+    addCircle({ x, y, value });
   }
   updateStatus();
 }
 
 function addCircle({ x, y, value, hover = false }) {
 
-  if (label == 'trained') {
-    ctx.fillStyle = 'red';
+  if (label == 'trained' && !hover) {
+    ctx.save();
+    ctx.strokeStyle = 'red';
     draw({ x, y, value });
-  } else if (hover) {
-    ctx.fillStyle = 'blue';
+    ctx.restore();
+  } else if (hover && label == 'trained') {
+    ctx.save();
+    ctx.strokeStyle = 'blue';
     ctx.globalAlpha = 0.5;
     draw({ x, y, value });
+    ctx.restore();
   } else {
+    ctx.save();
     data.push({ x, y, value, trained: false });
-    ctx.fillStyle = 'black';
+    ctx.strokeStyle = 'grey';
     draw({ x, y, value });
+    ctx.restore();
   }
 }
 
