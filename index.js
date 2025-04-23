@@ -54,6 +54,10 @@ window.addEventListener('keypress', (event) => {
   updateStatus();
 });
 
+function resetClassifier() {
+  classifier = ml5.neuralNetwork(options);
+}
+
 function initCanvas() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
@@ -65,12 +69,12 @@ function updateStatus() {
 
 function init() {
   initCanvas();
-  classifier = ml5.neuralNetwork(options);
+  resetClassifier();
   updateStatus();
 }
 
 function train() {
-  classifier = ml5.neuralNetwork(options);
+  resetClassifier();
 
   data.forEach(item => {
     let inputs = [item.x, item.y];
