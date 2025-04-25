@@ -18,7 +18,7 @@ canvas.addEventListener('click', click);
 canvas.addEventListener('mousemove', () => {
   if (!time) time = Date.now();
 
-  if (Date.now() - time > 50) {
+  if (Date.now() - time > 25) {
     const { top, left } = canvas.getBoundingClientRect();
     const x = event.clientX - left;
     const y = event.clientY - top;
@@ -116,7 +116,7 @@ function addCircle({ x, y, value, hover = false }) {
   } else if (hover && label == 'trained') {
     ctx.strokeStyle = 'blue';
     ctx.globalAlpha = 0.5;
-    draw({ x, y, value, color: 'green', alpha: 0.5 }); // ✅ don't push
+    draw({ x, y, value, color: 'green', alpha: 0.9 }); // ✅ don't push
   } else {
     data.push({ x, y, value, trained: false });
     ctx.strokeStyle = 'grey';
